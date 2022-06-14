@@ -30,14 +30,25 @@ contract MyNFT is ERC721, Ownable, ERC721Enumerable {
         isDisabledSetUrl = true;
     }
 
-    function batchMint(uint256 _mintQty) public onlyOwner {
+    function batchMint(uint256 _mintQty) public {
         require(totalSupply() + _mintQty <= maxSupply, "Token Supply Exceed");
         
         for (uint256 i = 1; i <= _mintQty; i++) {
             uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
-            _safeMint(_msgSender(), tokenId);
+            //check if token is already minted
+            if (!_exists(tokenId)) {
+                _safeMint(_msgSender(), tokenId);
+            } else {
+                _mintQty++;
+                continue;
+            }
         }
+    }
+
+    function reserveToken(address _to, uint256 _tokenId) external onlyOwner {
+        require(_tokenId < maxSupply, "Token Supply Exceed");
+        _safeMint(_to, _tokenId);
     }
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {

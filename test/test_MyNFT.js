@@ -1,5 +1,4 @@
 const { expect } = require('chai');
-const { should } = require('chai');
 
 describe("Token contract", function () {
     let hardhatToken;
@@ -16,13 +15,6 @@ describe("Token contract", function () {
         it("Return correct name and symbol", async function() {
             expect(await contract.name()).to.equal("PenBl");
             expect(await contract.symbol()).to.equal("PNL");
-        });
-
-        it("Should mint 5 token to owner address", async function () {
-            await contract.batchMint(maxSupply);
-            const [owner] = await ethers.getSigners();
-            const ownerBalance = await contract.balanceOf(owner.address);
-            expect(await parseInt(ownerBalance)).to.equal(maxSupply);    
         });
 
         it("Should set the right owner", async function () {

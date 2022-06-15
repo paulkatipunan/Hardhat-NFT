@@ -17,6 +17,13 @@ describe("Token contract", function () {
             expect(await contract.symbol()).to.equal("PNL");
         });
 
+        it("Should mint 5 token to owner address", async function () {
+            await contract.batchMint(maxSupply);
+            const [owner] = await ethers.getSigners();
+            // const ownerBalance = await contract.balanceOf(owner.address);
+            expect(await parseInt(contract.connect(owner.address).totalSupply())).to.equal(maxSupply);    
+        });
+
         it("Should set the right owner", async function () {
             const [owner] = await ethers.getSigners();
             const ownerBalance = await contract.balanceOf(owner.address);
